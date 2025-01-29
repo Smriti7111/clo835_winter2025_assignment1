@@ -29,16 +29,23 @@ jobs:
     - name: Build, test, tag, and push image to Amazon ECR
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-        ECR_REPOSITORY: clo835-assignment1
+        WEBAPP_REPOSITORY: webapp-repo
         WEBAPP_TAG: webapp-v0.1
+      run: |
+        # Build the WebApp container
+        docker build -t $ECR_REGISTRY/$WEBAPP_REPOSITORY:$WEBAPP_TAG -f Dockerfile .
+        
+        # Push WebApp container to ECR
+        docker push $ECR_REGISTRY/$WEBAPP_REPOSITORY:$WEBAPP_TAG
+
+    - name: Build, test, tag, and push MySQL image to Amazon ECR
+      env:
+        ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+        MYSQL_REPOSITORY: mysql-repo
         MYSQL_TAG: mysql-v0.1
       run: |
-        # Build the web application image using Dockerfile
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$WEBAPP_TAG -f Dockerfile .
-
-        # Build the MySQL image using Dockerfile_mysql
-        docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$MYSQL_TAG -f Dockerfile_mysql .
-
-        # Push both images to the same ECR repository
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$WEBAPP_TAG
-        docker push $ECR_REGISTRY/$ECR_REPOSITORY:$MYSQL_TAG
+        # Build the MySQL container
+        docker build -t $ECR_REGISTRY/$MYSQL_REPOSITORY:$MYSQL_TAG -f Dockerfile_mysql .
+        
+        # Push MySQL container to ECR
+        docker push $ECR_REGISTRY/$MYSQL_REPOSITORY:$MYSQL_TAG
