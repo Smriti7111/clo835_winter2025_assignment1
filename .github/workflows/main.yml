@@ -30,7 +30,7 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         WEBAPP_REPOSITORY: webapp-repo
-        WEBAPP_TAG: webapp-v0.1
+        WEBAPP_TAG: webapp-v0.2
       run: |
         # Build the WebApp container
         docker build -t $ECR_REGISTRY/$WEBAPP_REPOSITORY:$WEBAPP_TAG -f Dockerfile .
@@ -42,7 +42,7 @@ jobs:
       env:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         MYSQL_REPOSITORY: mysql-repo
-        MYSQL_TAG: mysql-v0.1
+        MYSQL_TAG: mysql-v0.2
       run: |
         # Build the MySQL container
         docker build -t $ECR_REGISTRY/$MYSQL_REPOSITORY:$MYSQL_TAG -f Dockerfile_mysql .
